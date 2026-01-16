@@ -4,6 +4,7 @@
 -- Loads daily climate observations from Parquet files
 -- Data is partitioned by year in S3
 
+USE WAREHOUSE SKYRA_ATMOS;
 USE DATABASE WEATHER_ANALYTICS;
 USE SCHEMA RAW;
 

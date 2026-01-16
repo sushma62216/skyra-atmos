@@ -1,7 +1,25 @@
 -- ============================================================
 -- GHCN Daily Data - Snowflake Database Setup
 -- ============================================================
--- Run this script first to create the database and schemas
+-- Run this script first to create the warehouse, database, and schemas
+
+-- ============================================================
+-- WAREHOUSE
+-- ============================================================
+
+-- Create warehouse for compute
+CREATE WAREHOUSE IF NOT EXISTS SKYRA_ATMOS
+    WAREHOUSE_SIZE = 'X-SMALL'
+    AUTO_SUSPEND = 60           -- Suspend after 60 seconds of inactivity
+    AUTO_RESUME = TRUE          -- Resume automatically when queries run
+    INITIALLY_SUSPENDED = TRUE; -- Start suspended to avoid charges
+
+-- Use the warehouse
+USE WAREHOUSE SKYRA_ATMOS;
+
+-- ============================================================
+-- DATABASE
+-- ============================================================
 
 -- Create database
 CREATE DATABASE IF NOT EXISTS WEATHER_ANALYTICS;

@@ -4,6 +4,7 @@
 -- Creates external stage pointing to NOAA public S3 bucket
 -- No credentials needed for public bucket access
 
+USE WAREHOUSE SKYRA_ATMOS;
 USE DATABASE WEATHER_ANALYTICS;
 USE SCHEMA RAW;
 

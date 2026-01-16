@@ -4,6 +4,7 @@
 -- Loads metadata from fixed-width text files
 -- Uses SUBSTR to parse fixed-width columns
 
+USE WAREHOUSE SKYRA_ATMOS;
 USE DATABASE WEATHER_ANALYTICS;
 USE SCHEMA RAW;
 

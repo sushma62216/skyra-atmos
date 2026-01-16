@@ -3,6 +3,7 @@
 -- ============================================================
 -- Creates raw tables for GHCN metadata and daily observations
 
+USE WAREHOUSE SKYRA_ATMOS;
 USE DATABASE WEATHER_ANALYTICS;
 USE SCHEMA RAW;
 
