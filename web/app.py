@@ -5,17 +5,14 @@ Skyra Atmos - Weather Analytics Web Application
 import os
 from flask import Flask, render_template, jsonify
 import snowflake.connector
-from dotenv import load_dotenv
-
-load_dotenv()
 
 app = Flask(__name__)
 
-# Snowflake connection config
+# Snowflake connection config (strip whitespace from env vars)
 SNOWFLAKE_CONFIG = {
-    'account': os.getenv('SNOWFLAKE_ACCOUNT', 'mrbhvfe-ozb46267'),
-    'user': os.getenv('SNOWFLAKE_USER'),
-    'password': os.getenv('SNOWFLAKE_PASSWORD'),
+    'account': os.getenv('SNOWFLAKE_ACCOUNT', 'mrbhvfe-ozb46267').strip(),
+    'user': os.getenv('SNOWFLAKE_USER', '').strip(),
+    'password': os.getenv('SNOWFLAKE_PASSWORD', '').strip(),
     'warehouse': 'SKYRA_ATMOS',
     'database': 'WEATHER_ANALYTICS',
     'schema': 'RAW'
