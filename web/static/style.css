@@ -282,6 +282,349 @@ body {
     text-decoration: underline;
 }
 
+/* ============================================================
+   TIME MACHINE PAGE
+   ============================================================ */
+
+.time-machine-page {
+    padding-top: 80px;
+    min-height: 100vh;
+}
+
+.tm-hero {
+    text-align: center;
+    padding: 4rem 2rem 2rem;
+}
+
+.tm-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.tm-hero h1 {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(90deg, #00d4ff, #7b2fff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.tm-hero p {
+    color: #a0a0b0;
+    font-size: 1.2rem;
+}
+
+/* Date Picker Section */
+.date-picker-section {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+    text-align: center;
+}
+
+.date-picker-container {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+}
+
+.date-picker-container label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #a0a0b0;
+    font-size: 0.9rem;
+}
+
+.date-picker-container input[type="date"] {
+    padding: 1rem 1.5rem;
+    font-size: 1.1rem;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    color: #ffffff;
+    cursor: pointer;
+    transition: border-color 0.3s;
+}
+
+.date-picker-container input[type="date"]:focus {
+    outline: none;
+    border-color: #00d4ff;
+}
+
+.date-picker-container input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    cursor: pointer;
+}
+
+.cta-button {
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+/* Quick Dates */
+.quick-dates {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.quick-dates span {
+    color: #a0a0b0;
+    font-size: 0.9rem;
+}
+
+.quick-date {
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    color: #ffffff;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.quick-date:hover {
+    background: rgba(0, 212, 255, 0.2);
+    border-color: #00d4ff;
+}
+
+/* Results Section */
+.results-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.results-section.hidden {
+    display: none;
+}
+
+.date-display {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.date-display h2 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.date-context {
+    background: linear-gradient(90deg, rgba(0, 212, 255, 0.2), rgba(123, 47, 255, 0.2));
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    display: inline-block;
+    font-size: 1rem;
+}
+
+.date-context.hidden {
+    display: none;
+}
+
+/* Weather Summary Cards */
+.weather-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.summary-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: transform 0.3s;
+}
+
+.summary-card:hover {
+    transform: translateY(-5px);
+}
+
+.summary-card.hot {
+    border-color: rgba(255, 100, 100, 0.3);
+}
+
+.summary-card.cold {
+    border-color: rgba(100, 200, 255, 0.3);
+}
+
+.card-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.card-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #00d4ff;
+    margin-bottom: 0.25rem;
+}
+
+.card-label {
+    color: #a0a0b0;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Extremes Section */
+.extremes-section {
+    margin-bottom: 3rem;
+}
+
+.extremes-section h3 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+}
+
+.extremes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.extreme-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 1.5rem;
+}
+
+.extreme-card h4 {
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.extreme-card.hottest {
+    border-left: 3px solid #ff6b6b;
+}
+
+.extreme-card.coldest {
+    border-left: 3px solid #4ecdc4;
+}
+
+.extreme-card.wettest {
+    border-left: 3px solid #45b7d1;
+}
+
+.extreme-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.extreme-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.extreme-item:last-child {
+    border-bottom: none;
+}
+
+.extreme-item .location {
+    font-size: 0.9rem;
+    color: #e0e0e0;
+}
+
+.extreme-item .value {
+    font-weight: 600;
+    color: #00d4ff;
+}
+
+/* Countries Section */
+.countries-section {
+    margin-bottom: 3rem;
+}
+
+.countries-section h3 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+}
+
+.countries-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.country-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 1rem;
+    transition: transform 0.3s;
+}
+
+.country-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(0, 212, 255, 0.3);
+}
+
+.country-name {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.country-stats {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.85rem;
+    color: #a0a0b0;
+}
+
+/* No Data Section */
+.no-data-section {
+    text-align: center;
+    padding: 4rem 2rem;
+}
+
+.no-data-section.hidden {
+    display: none;
+}
+
+.no-data-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.no-data-section h2 {
+    margin-bottom: 0.5rem;
+}
+
+.no-data-section p {
+    color: #a0a0b0;
+}
+
+/* Nav Active State */
+.nav-links a.active {
+    color: #00d4ff;
+}
+
+.logo {
+    text-decoration: none;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .hero-content h1 {
@@ -293,6 +636,26 @@ body {
     }
 
     .data-container {
+        grid-template-columns: 1fr;
+    }
+
+    .tm-hero h1 {
+        font-size: 2rem;
+    }
+
+    .date-picker-container {
+        flex-direction: column;
+    }
+
+    .quick-dates {
+        flex-direction: column;
+    }
+
+    .date-display h2 {
+        font-size: 1.8rem;
+    }
+
+    .extremes-grid {
         grid-template-columns: 1fr;
     }
 }

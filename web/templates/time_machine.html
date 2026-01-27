@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Climate Time Machine - Skyra Atmos</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <span class="logo-icon">🌤️</span>
+                <span class="logo-text">Skyra Atmos</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="/">Dashboard</a></li>
+                <li><a href="/time-machine" class="active">Time Machine</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="time-machine-page">
+        <header class="tm-hero">
+            <div class="tm-icon">🕰️</div>
+            <h1>Climate Time Machine</h1>
+            <p>Travel back in time and discover the weather on any day in history</p>
+        </header>
+
+        <section class="date-picker-section">
+            <div class="date-picker-container">
+                <label for="date-input">Select a Date</label>
+                <input type="date" id="date-input" min="1900-01-01" max="2023-12-31" value="1969-07-20">
+                <button id="explore-btn" class="cta-button">Explore Weather</button>
+            </div>
+            <div class="quick-dates">
+                <span>Quick picks:</span>
+                <button class="quick-date" data-date="1969-07-20">Moon Landing (1969)</button>
+                <button class="quick-date" data-date="1989-11-09">Berlin Wall Fall (1989)</button>
+                <button class="quick-date" data-date="2000-01-01">Y2K (2000)</button>
+                <button class="quick-date" data-date="1912-04-15">Titanic (1912)</button>
+            </div>
+        </section>
+
+        <section id="results" class="results-section hidden">
+            <div class="date-display">
+                <h2 id="selected-date">July 20, 1969</h2>
+                <p id="date-context" class="date-context"></p>
+            </div>
+
+            <div class="weather-summary">
+                <div class="summary-card">
+                    <div class="card-icon">📍</div>
+                    <div class="card-value" id="station-count">--</div>
+                    <div class="card-label">Stations Reporting</div>
+                </div>
+                <div class="summary-card hot">
+                    <div class="card-icon">🌡️</div>
+                    <div class="card-value" id="avg-max-temp">--</div>
+                    <div class="card-label">Avg High Temp</div>
+                </div>
+                <div class="summary-card cold">
+                    <div class="card-icon">❄️</div>
+                    <div class="card-value" id="avg-min-temp">--</div>
+                    <div class="card-label">Avg Low Temp</div>
+                </div>
+                <div class="summary-card">
+                    <div class="card-icon">🌧️</div>
+                    <div class="card-value" id="precipitation">--</div>
+                    <div class="card-label">Avg Precipitation</div>
+                </div>
+            </div>
+
+            <div class="extremes-section">
+                <h3>🌍 Weather Extremes on This Day</h3>
+                <div class="extremes-grid">
+                    <div class="extreme-card hottest">
+                        <h4>🔥 Hottest Places</h4>
+                        <div id="hottest-list" class="extreme-list">
+                            <p class="loading">Loading...</p>
+                        </div>
+                    </div>
+                    <div class="extreme-card coldest">
+                        <h4>🥶 Coldest Places</h4>
+                        <div id="coldest-list" class="extreme-list">
+                            <p class="loading">Loading...</p>
+                        </div>
+                    </div>
+                    <div class="extreme-card wettest">
+                        <h4>🌊 Wettest Places</h4>
+                        <div id="wettest-list" class="extreme-list">
+                            <p class="loading">Loading...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="countries-section">
+                <h3>🗺️ Weather by Country</h3>
+                <div id="countries-grid" class="countries-grid">
+                    <p class="loading">Loading...</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="no-data" class="no-data-section hidden">
+            <div class="no-data-icon">📭</div>
+            <h2>No Data Available</h2>
+            <p>Sorry, we don't have weather records for this date. Try a different date.</p>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>Data Source: <a href="https://www.ncei.noaa.gov/products/land-based-station/global-historical-climatology-network-daily" target="_blank">NOAA GHCN-Daily</a></p>
+        <p>&copy; 2026 Skyra Atmos. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const dateInput = document.getElementById('date-input');
+        const exploreBtn = document.getElementById('explore-btn');
+        const resultsSection = document.getElementById('results');
+        const noDataSection = document.getElementById('no-data');
+
+        // Historical events for context
+        const historicalEvents = {
+            '19690720': '🚀 The day humans first walked on the Moon!',
+            '19891109': '🧱 The Berlin Wall fell on this day',
+            '20000101': '🎉 The world celebrated the new millennium',
+            '19120415': '🚢 The Titanic sank on this day',
+            '19450815': '🕊️ World War II ended',
+            '19630828': '✊ Martin Luther King Jr. gave his "I Have a Dream" speech',
+            '19850713': '🎸 Live Aid concert took place'
+        };
+
+        // Format date for display
+        function formatDate(dateStr) {
+            const date = new Date(dateStr.slice(0,4), dateStr.slice(4,6)-1, dateStr.slice(6,8));
+            return date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        }
+
+        // Convert date input to API format (YYYYMMDD)
+        function toApiDate(inputDate) {
+            return inputDate.replace(/-/g, '');
+        }
+
+        // Load weather data for a date
+        async function loadWeatherData(date) {
+            const apiDate = toApiDate(date);
+
+            resultsSection.classList.add('hidden');
+            noDataSection.classList.add('hidden');
+
+            try {
+                // Fetch main summary
+                const summaryRes = await fetch(`/api/time-machine/${apiDate}`);
+                const summary = await summaryRes.json();
+
+                if (summary.error || summary.station_count === 0) {
+                    noDataSection.classList.remove('hidden');
+                    return;
+                }
+
+                // Update display
+                document.getElementById('selected-date').textContent = formatDate(apiDate);
+
+                // Check for historical context
+                const context = historicalEvents[apiDate];
+                const contextEl = document.getElementById('date-context');
+                if (context) {
+                    contextEl.textContent = context;
+                    contextEl.classList.remove('hidden');
+                } else {
+                    contextEl.classList.add('hidden');
+                }
+
+                document.getElementById('station-count').textContent = summary.station_count.toLocaleString();
+                document.getElementById('avg-max-temp').textContent =
+                    summary.avg_max_temp_c ? `${summary.avg_max_temp_c}°C / ${summary.avg_max_temp_f}°F` : 'N/A';
+                document.getElementById('avg-min-temp').textContent =
+                    summary.avg_min_temp_c ? `${summary.avg_min_temp_c}°C / ${summary.avg_min_temp_f}°F` : 'N/A';
+                document.getElementById('precipitation').textContent =
+                    summary.avg_precipitation_mm ? `${summary.avg_precipitation_mm} mm` : 'N/A';
+
+                resultsSection.classList.remove('hidden');
+
+                // Fetch extremes
+                const extremesRes = await fetch(`/api/time-machine/${apiDate}/extremes`);
+                const extremes = await extremesRes.json();
+
+                // Update hottest
+                const hottestList = document.getElementById('hottest-list');
+                if (extremes.hottest && extremes.hottest.length > 0) {
+                    hottestList.innerHTML = extremes.hottest.map(loc => `
+                        <div class="extreme-item">
+                            <span class="location">${loc.station || 'Unknown'}, ${loc.country}</span>
+                            <span class="value">${loc.temp_c}°C / ${loc.temp_f}°F</span>
+                        </div>
+                    `).join('');
+                } else {
+                    hottestList.innerHTML = '<p>No data</p>';
+                }
+
+                // Update coldest
+                const coldestList = document.getElementById('coldest-list');
+                if (extremes.coldest && extremes.coldest.length > 0) {
+                    coldestList.innerHTML = extremes.coldest.map(loc => `
+                        <div class="extreme-item">
+                            <span class="location">${loc.station || 'Unknown'}, ${loc.country}</span>
+                            <span class="value">${loc.temp_c}°C / ${loc.temp_f}°F</span>
+                        </div>
+                    `).join('');
+                } else {
+                    coldestList.innerHTML = '<p>No data</p>';
+                }
+
+                // Update wettest
+                const wettestList = document.getElementById('wettest-list');
+                if (extremes.wettest && extremes.wettest.length > 0) {
+                    wettestList.innerHTML = extremes.wettest.map(loc => `
+                        <div class="extreme-item">
+                            <span class="location">${loc.station || 'Unknown'}, ${loc.country}</span>
+                            <span class="value">${loc.precip_mm} mm</span>
+                        </div>
+                    `).join('');
+                } else {
+                    wettestList.innerHTML = '<p>No data</p>';
+                }
+
+                // Fetch countries
+                const countriesRes = await fetch(`/api/time-machine/${apiDate}/countries`);
+                const countries = await countriesRes.json();
+
+                const countriesGrid = document.getElementById('countries-grid');
+                if (countries && countries.length > 0) {
+                    countriesGrid.innerHTML = countries.map(c => `
+                        <div class="country-card">
+                            <div class="country-name">${c.country}</div>
+                            <div class="country-stats">
+                                <span>📍 ${c.stations} stations</span>
+                                ${c.avg_max_c ? `<span>🌡️ ${c.avg_max_c}°C</span>` : ''}
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    countriesGrid.innerHTML = '<p>No country data available</p>';
+                }
+
+            } catch (error) {
+                console.error('Error loading weather data:', error);
+                noDataSection.classList.remove('hidden');
+            }
+        }
+
+        // Event listeners
+        exploreBtn.addEventListener('click', () => {
+            loadWeatherData(dateInput.value);
+        });
+
+        dateInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                loadWeatherData(dateInput.value);
+            }
+        });
+
+        // Quick date buttons
+        document.querySelectorAll('.quick-date').forEach(btn => {
+            btn.addEventListener('click', () => {
+                dateInput.value = btn.dataset.date;
+                loadWeatherData(btn.dataset.date);
+            });
+        });
+    </script>
+</body>
+</html>
