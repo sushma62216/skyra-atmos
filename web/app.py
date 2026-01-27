@@ -13,7 +13,7 @@ app = Flask(__name__)
 
 # Snowflake connection config
 SNOWFLAKE_CONFIG = {
-    'account': os.getenv('SNOWFLAKE_ACCOUNT', 'yafshsp-yob78287'),
+    'account': os.getenv('SNOWFLAKE_ACCOUNT', 'mrbhvfe-ozb46267'),
     'user': os.getenv('SNOWFLAKE_USER'),
     'password': os.getenv('SNOWFLAKE_PASSWORD'),
     'warehouse': 'SKYRA_ATMOS',
