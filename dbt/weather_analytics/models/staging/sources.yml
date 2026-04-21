@@ -1,0 +1,70 @@
+version: 2
+
+sources:
+  - name: raw
+    database: WEATHER_ANALYTICS
+    schema: RAW
+    description: "Raw NOAA GHCN data loaded from S3 via Snowflake external stage"
+    tables:
+      - name: RAW_STATIONS
+        description: "129,658 weather stations with coordinates, elevation, and metadata"
+        loaded_at_field: _LOADED_AT
+        columns:
+          - name: STATION_ID
+            description: "11-character station identifier"
+          - name: LATITUDE
+          - name: LONGITUDE
+          - name: ELEVATION
+          - name: STATE
+          - name: STATION_NAME
+          - name: GSN_FLAG
+          - name: HCN_CRN_FLAG
+          - name: WMO_ID
+
+      - name: RAW_COUNTRIES
+        description: "219 country codes and names"
+        loaded_at_field: _LOADED_AT
+        columns:
+          - name: COUNTRY_CODE
+          - name: COUNTRY_NAME
+
+      - name: RAW_STATES
+        description: "74 US state and province codes and names"
+        loaded_at_field: _LOADED_AT
+        columns:
+          - name: STATE_CODE
+          - name: STATE_NAME
+
+      - name: RAW_INVENTORY
+        description: "767,689 records of data availability per station and element"
+        loaded_at_field: _LOADED_AT
+        columns:
+          - name: STATION_ID
+          - name: LATITUDE
+          - name: LONGITUDE
+          - name: ELEMENT
+          - name: FIRST_YEAR
+          - name: LAST_YEAR
+
+      - name: RAW_DAILY_OBSERVATIONS
+        description: "Daily climate observations (TMAX, TMIN, PRCP, SNOW, etc.) partitioned by year"
+        loaded_at_field: _LOADED_AT
+        columns:
+          - name: ID
+            description: "Station ID"
+          - name: DATE
+            description: "Observation date in YYYYMMDD format"
+          - name: ELEMENT
+            description: "Observation type (TMAX, TMIN, PRCP, SNOW, SNWD, AWND, etc.)"
+          - name: DATA_VALUE
+            description: "Observation value — units vary by element"
+          - name: M_FLAG
+            description: "Measurement flag"
+          - name: Q_FLAG
+            description: "Quality flag"
+          - name: S_FLAG
+            description: "Source flag"
+          - name: OBS_TIME
+            description: "Observation time (HHMM)"
+          - name: YEAR
+            description: "Partition year derived from file path"
