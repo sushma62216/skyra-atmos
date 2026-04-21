@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skyra Atmos - Weather Analytics</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <span class="logo-icon">🌤️</span>
+                <span class="logo-text">Skyra Atmos</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#dashboard">Dashboard</a></li>
+                <li><a href="/time-machine">Time Machine</a></li>
+                <li><a href="#about">About</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="hero-content">
+            <h1>Global Weather Analytics</h1>
+            <p>Explore historical climate data from thousands of weather stations worldwide</p>
+            <a href="#dashboard" class="cta-button">Explore Data</a>
+        </div>
+        <div class="hero-visual">
+            <div class="globe-animation"></div>
+        </div>
+    </header>
+
+    <section id="dashboard" class="dashboard">
+        <h2>Live Statistics</h2>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">📍</div>
+                <div class="stat-value" id="station-count">--</div>
+                <div class="stat-label">Weather Stations</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🌍</div>
+                <div class="stat-value" id="country-count">--</div>
+                <div class="stat-label">Countries</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">📊</div>
+                <div class="stat-value" id="observation-count">--</div>
+                <div class="stat-label">Observations</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">📅</div>
+                <div class="stat-value" id="latest-date">--</div>
+                <div class="stat-label">Latest Data</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="features-section">
+        <h2>Explore Our Tools</h2>
+        <div class="feature-cards">
+            <a href="/time-machine" class="feature-card time-machine-card">
+                <div class="feature-card-icon">🕰️</div>
+                <h3>Climate Time Machine</h3>
+                <p>Travel back in time and discover the weather on any day in history. Explore famous dates like the Moon landing or your birthday!</p>
+                <span class="feature-card-cta">Explore Now →</span>
+            </a>
+            <div class="feature-card coming-soon">
+                <div class="feature-card-icon">⚔️</div>
+                <h3>City Weather Battle</h3>
+                <p>Compare weather between two cities head-to-head. Which city has better weather?</p>
+                <span class="feature-card-badge">Coming Soon</span>
+            </div>
+            <div class="feature-card coming-soon">
+                <div class="feature-card-icon">📈</div>
+                <h3>Climate Change Explorer</h3>
+                <p>Visualize 100 years of temperature changes for any location on Earth.</p>
+                <span class="feature-card-badge">Coming Soon</span>
+            </div>
+        </div>
+    </section>
+
+    <section id="data" class="data-section">
+        <div class="data-container">
+            <div class="data-card">
+                <h3>Top Countries by Stations</h3>
+                <div id="countries-list" class="data-list">
+                    <p class="loading">Loading...</p>
+                </div>
+            </div>
+            <div class="data-card">
+                <h3>Observation Types</h3>
+                <div id="observations-list" class="data-list">
+                    <p class="loading">Loading...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="about">
+        <h2>About This Project</h2>
+        <p>Skyra Atmos provides access to the NOAA Global Historical Climatology Network (GHCN) daily dataset,
+           one of the most comprehensive collections of weather observations available.</p>
+        <div class="features">
+            <div class="feature">
+                <h4>🌡️ Temperature</h4>
+                <p>Daily max, min, and average temperatures</p>
+            </div>
+            <div class="feature">
+                <h4>🌧️ Precipitation</h4>
+                <p>Rainfall and snowfall measurements</p>
+            </div>
+            <div class="feature">
+                <h4>💨 Wind</h4>
+                <p>Wind speed and direction data</p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>Data Source: <a href="https://www.ncei.noaa.gov/products/land-based-station/global-historical-climatology-network-daily" target="_blank">NOAA GHCN-Daily</a></p>
+        <p>&copy; 2026 Skyra Atmos. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Fetch and display statistics
+        async function loadStats() {
+            try {
+                const response = await fetch('/api/stats');
+                const data = await response.json();
+
+                document.getElementById('station-count').textContent =
+                    data.stations ? data.stations.toLocaleString() : '--';
+                document.getElementById('country-count').textContent =
+                    data.countries || '--';
+                document.getElementById('observation-count').textContent =
+                    data.observations ? (data.observations / 1000000).toFixed(1) + 'M' : '--';
+                document.getElementById('latest-date').textContent =
+                    data.latest_date || '--';
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+
+        // Fetch and display top countries
+        async function loadCountries() {
+            try {
+                const response = await fetch('/api/top-countries');
+                const data = await response.json();
+
+                const container = document.getElementById('countries-list');
+                if (data.length > 0) {
+                    container.innerHTML = data.map(country => `
+                        <div class="list-item">
+                            <span class="item-name">${country.name}</span>
+                            <span class="item-value">${country.stations.toLocaleString()} stations</span>
+                        </div>
+                    `).join('');
+                } else {
+                    container.innerHTML = '<p>No data available</p>';
+                }
+            } catch (error) {
+                document.getElementById('countries-list').innerHTML = '<p>Error loading data</p>';
+            }
+        }
+
+        // Fetch and display observation types
+        async function loadObservations() {
+            try {
+                const response = await fetch('/api/recent-observations');
+                const data = await response.json();
+
+                const elementNames = {
+                    'TMAX': '🌡️ Max Temperature',
+                    'TMIN': '❄️ Min Temperature',
+                    'PRCP': '🌧️ Precipitation',
+                    'SNOW': '🌨️ Snowfall'
+                };
+
+                const container = document.getElementById('observations-list');
+                if (data.length > 0) {
+                    container.innerHTML = data.map(obs => `
+                        <div class="list-item">
+                            <span class="item-name">${elementNames[obs.element] || obs.element}</span>
+                            <span class="item-value">${obs.count.toLocaleString()} records</span>
+                        </div>
+                    `).join('');
+                } else {
+                    container.innerHTML = '<p>No data available</p>';
+                }
+            } catch (error) {
+                document.getElementById('observations-list').innerHTML = '<p>Error loading data</p>';
+            }
+        }
+
+        // Load all data on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadStats();
+            loadCountries();
+            loadObservations();
+        });
+    </script>
+</body>
+</html>
