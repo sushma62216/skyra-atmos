@@ -27,6 +27,6 @@ logs/
 data/
 
 # dbt
-dbt/target/
-dbt/logs/
-dbt/dbt_packages/
+dbt/weather_analytics/target/
+dbt/weather_analytics/logs/
+dbt/weather_analytics/dbt_packages/
