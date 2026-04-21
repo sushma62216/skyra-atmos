@@ -20,6 +20,8 @@ sources:
           - name: GSN_FLAG
           - name: HCN_CRN_FLAG
           - name: WMO_ID
+          - name: _LOADED_AT
+            description: "Timestamp when this row was loaded by the ingestion pipeline"
 
       - name: RAW_COUNTRIES
         description: "219 country codes and names"
@@ -27,6 +29,8 @@ sources:
         columns:
           - name: COUNTRY_CODE
           - name: COUNTRY_NAME
+          - name: _LOADED_AT
+            description: "Timestamp when this row was loaded by the ingestion pipeline"
 
       - name: RAW_STATES
         description: "74 US state and province codes and names"
@@ -34,6 +38,8 @@ sources:
         columns:
           - name: STATE_CODE
           - name: STATE_NAME
+          - name: _LOADED_AT
+            description: "Timestamp when this row was loaded by the ingestion pipeline"
 
       - name: RAW_INVENTORY
         description: "767,689 records of data availability per station and element"
@@ -43,15 +49,18 @@ sources:
           - name: LATITUDE
           - name: LONGITUDE
           - name: ELEMENT
+            description: "Observation type available at this station (TMAX, TMIN, PRCP, SNOW, SNWD, AWND, etc.)"
           - name: FIRST_YEAR
           - name: LAST_YEAR
+          - name: _LOADED_AT
+            description: "Timestamp when this row was loaded by the ingestion pipeline"
 
       - name: RAW_DAILY_OBSERVATIONS
         description: "Daily climate observations (TMAX, TMIN, PRCP, SNOW, etc.) partitioned by year"
         loaded_at_field: _LOADED_AT
         columns:
           - name: ID
-            description: "Station ID"
+            description: "Station ID — note: this column is named ID here rather than STATION_ID as in RAW_STATIONS and RAW_INVENTORY"
           - name: DATE
             description: "Observation date in YYYYMMDD format"
           - name: ELEMENT
@@ -68,3 +77,5 @@ sources:
             description: "Observation time (HHMM)"
           - name: YEAR
             description: "Partition year derived from file path"
+          - name: _LOADED_AT
+            description: "Timestamp when this row was loaded by the ingestion pipeline"
